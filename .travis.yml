@@ -1,0 +1,26 @@
+language: python
+python: "3.6"
+env:
+  global:
+    - CONAN_REFERENCE: "quickfix/1.15.1"
+    - CONAN_BRANCH: "andrbek/testing"
+    - CONAN_UPLOAD: "https://api.bintray.com/conan/andrbek/conan"
+    - CONAN_REMOTE: "andrbek"
+    - CONAN_USERNAME: "andreyandreevich"
+before_script:
+  - pip install conan --upgrade
+  - pip install conan_package_tools
+script:
+  - conan export . $CONAN_BRANCH
+  - conan export . demo/testing
+  - conan install $CONAN_REFERENCE@demo/testing --build
+  - conan test test_package $CONAN_REFERENCE@demo/testing
+deploy:
+  - provider: script
+    skip_cleanup: true
+    on:
+      all_branches: true
+    script:
+      conan remote add $CONAN_REMOTE $CONAN_UPLOAD --insert &&
+      conan user -p $BINTRAY_API_KEY -r $CONAN_REMOTE $CONAN_USERNAME &&
+      conan upload $CONAN_REFERENCE@$CONAN_BRANCH --all -r=$CONAN_REMOTE
