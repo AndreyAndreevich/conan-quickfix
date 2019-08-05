@@ -42,8 +42,6 @@ class QuickFixConan(ConanFile):
         cmake.configure(source_folder=self.name)
         if self.settings.os == "Windows":
             self.cpp_info.defines.append("_CRT_SECURE_NO_WARNINGS")
-        elif self.settings.os == "Linux":
-            self.cpp_info.cppflags.append("-Wdeprecated")
         cmake.build()
 
     def package(self):
