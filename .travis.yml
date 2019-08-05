@@ -13,7 +13,7 @@ before_script:
 script:
   - conan export . $CONAN_BRANCH
   - conan export . demo/testing
-  - conan install $CONAN_REFERENCE@demo/testing --build
+  - conan install $CONAN_REFERENCE@demo/testing -s compiler.cppstd=c++11 --build
   - conan test test_package $CONAN_REFERENCE@demo/testing
 deploy:
   - provider: script

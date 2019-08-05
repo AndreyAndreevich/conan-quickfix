@@ -32,15 +32,18 @@ class QuickFixConan(ConanFile):
             include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
             conan_basic_setup()
 
-            set(CMAKE_CXX_STANDARD 17)
-
             include("CMakeListsOriginal.txt")
             '''.encode())
         os.close(fd)
 
     def build(self):
         cmake = CMake(self)
+        cmake.definitions['HAVE_SSL'] = self.options.ssl
         cmake.configure(source_folder=self.name)
+        if self.settings.os == "Windows":
+            self.cpp_info.defines.append("_CRT_SECURE_NO_WARNINGS")
+        elif self.settings.os == "Linux":
+            self.cpp_info.cxxflags.append("-Wdeprecated")
         cmake.build()
 
     def package(self):
