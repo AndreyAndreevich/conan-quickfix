@@ -29,11 +29,13 @@ class QuickFixConan(ConanFile):
         os.write(fd, '''cmake_minimum_required(VERSION 3.0)
             project(cmake_wrapper)
 
-            include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+            include(${{CMAKE_BINARY_DIR}}/conanbuildinfo.cmake)
             conan_basic_setup()
 
+            set(CMAKE_CXX_STANDARD {conan_cppstd})
+
             include("CMakeListsOriginal.txt")
-            '''.encode())
+            '''.format(conan_cppstd=self.settings.compiler.cppstd).encode())
         os.close(fd)
 
     def build(self):
