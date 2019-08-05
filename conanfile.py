@@ -32,6 +32,8 @@ class QuickFixConan(ConanFile):
             include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
             conan_basic_setup()
 
+            set(CMAKE_CXX_STANDARD 17)
+
             include("CMakeListsOriginal.txt")
             '''.encode())
         os.close(fd)
