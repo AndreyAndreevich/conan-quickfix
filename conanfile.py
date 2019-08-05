@@ -11,10 +11,12 @@ class QuickFixConan(ConanFile):
     description = "QuickFIX C++ Fix Engine Library"
     settings = "os", "compiler", "build_type", "arch"
     options = {
-        "ssl": [True, False]
+        "ssl": [True, False],
+        "cxx_standard": [11, 14, 17]
     }
     default_options = {
-        "ssl": False
+        "ssl": False,
+        "default": 11
     }
     generators = "cmake"
 
@@ -29,11 +31,13 @@ class QuickFixConan(ConanFile):
         os.write(fd, '''cmake_minimum_required(VERSION 3.0)
             project(cmake_wrapper)
 
-            include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+            include(${{CMAKE_BINARY_DIR}}/conanbuildinfo.cmake)
             conan_basic_setup()
 
+            set(CMAKE_CXX_STANDARD {cxx_standard})
+
             include("CMakeListsOriginal.txt")
-            '''.encode())
+            '''.format(cxx_standard=self.options.cxx_standard).encode())
         os.close(fd)
 
     def build(self):
