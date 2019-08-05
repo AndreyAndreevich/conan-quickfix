@@ -16,7 +16,7 @@ class QuickFixConan(ConanFile):
     }
     default_options = {
         "ssl": False,
-        "default": 11
+        "cxx_standard": 11
     }
     generators = "cmake"
 
