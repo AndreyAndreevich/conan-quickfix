@@ -24,7 +24,7 @@ class QuickFixConan(ConanFile):
         git = tools.Git(folder=self.name)
         git.clone("https://github.com/quickfix/quickfix")
         #git.checkout("v%s" % self.version)
-        git.checkout("a46708090444826c5f46a5dbf2ba4b069b413c58")
+        git.checkout("fb2e3cf8f9cdef6e66c546d590797e903052d76a")
         os.rename(os.path.join(self.name, "CMakeLists.txt"),
                   os.path.join(self.name, "CMakeListsOriginal.txt"))
         fd = os.open(os.path.join(self.name, "CMakeLists.txt"),
@@ -44,12 +44,13 @@ class QuickFixConan(ConanFile):
     def build(self):
         cmake = CMake(self)
         cmake.definitions['HAVE_SSL'] = self.options.ssl
-        cmake.configure(source_folder=self.name)
-        if os.path.isfile("src/C++/Except.h"):
-            if not os.path.isdir("include/quickfix"):
-                os.makedirs("include/quickfix")
-            open("include/quickfix/Except.h", "wb").write(
-                open("src/C++/Except.h", "rb").read())
+        source_folder = self.name
+        cmake.configure(source_folder=source_folder)
+        if os.path.isfile(source_folder + "/src/C++/Except.h"):
+            if not os.path.isdir(source_folder + "/include/quickfix"):
+                os.makedirs(source_folder + "/include/quickfix")
+            open(source_folder + "/include/quickfix/Except.h", "wb").write(
+                open(source_folder + "/src/C++/Except.h", "rb").read())
         cmake.build()
 
     def package(self):
