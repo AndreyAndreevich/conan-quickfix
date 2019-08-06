@@ -45,6 +45,9 @@ class QuickFixConan(ConanFile):
         cmake = CMake(self)
         cmake.definitions['HAVE_SSL'] = self.options.ssl
         cmake.configure(source_folder=self.name)
+        os.system("pwd")
+        if os.path.isfile(""):
+            pass
         cmake.build()
 
     def package(self):
