@@ -23,7 +23,8 @@ class QuickFixConan(ConanFile):
     def source(self):
         git = tools.Git(folder=self.name)
         git.clone("https://github.com/quickfix/quickfix")
-        git.checkout("v%s" % self.version)
+        #git.checkout("v%s" % self.version)
+        git.checkout("fb2e3cf8f9cdef6e66c546d590797e903052d76a")
         os.rename(os.path.join(self.name, "CMakeLists.txt"),
                   os.path.join(self.name, "CMakeListsOriginal.txt"))
         fd = os.open(os.path.join(self.name, "CMakeLists.txt"),
