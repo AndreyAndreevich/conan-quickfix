@@ -45,9 +45,11 @@ class QuickFixConan(ConanFile):
         cmake = CMake(self)
         cmake.definitions['HAVE_SSL'] = self.options.ssl
         cmake.configure(source_folder=self.name)
-        os.system("pwd")
-        if os.path.isfile(""):
-            pass
+        if os.path.isfile("src/C++/Except.h"):
+            if not os.path.isdir("include/quickfix"):
+                os.makedirs("include/quickfix")
+            open("include/quickfix/Except.h", "wb").write(
+                open("src/C++/Except.h", "rb").read())
         cmake.build()
 
     def package(self):
